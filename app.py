@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, url_for
+from flask import Flask, redirect, render_template, request, url_for
 
 app = Flask(__name__)
 
@@ -61,5 +61,33 @@ def vote(link_id, action):
     return redirect(url_for("homepage"))
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
+# if __name__ == "__main__":
+#     app.run(debug=True)
+
+
+@app.route("/submit", methods=["GET", "POST"])
+def submit():
+    if request.method == "POST":
+        title = request.form.get("title", "").strip()
+        url = request.form.get("url", "").strip()
+
+        # Basic validation
+        if not title:
+            return "Error: Title cannot be empty", 400
+        if not url.startswith("http"):
+            return "Error: URL must start with http", 400
+
+        # Create new post
+        new_id = max(link["id"] for link in dog_links) + 1 if dog_links else 1
+        new_post = {
+            "id": new_id,
+            "title": title,
+            "url": url,
+            "score": 1,  # Default score
+        }
+
+        dog_links.append(new_post)
+        return redirect(url_for("index"))
+
+    # GET request - show the form
+    return render_template("submit.html")

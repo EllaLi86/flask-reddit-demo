@@ -83,12 +83,17 @@
     <header>
       <div class="container">
         <h1>Flask Reddit — Dogs</h1>
+        <nav style="margin-top: 8px;">
+                <a href="{{ url_for('submit') }}" style="background-color: #0079d3; color: white; padding: 6px 12px; text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: 500;">
+                    + Submit New Post
+                </a>
+          </nav>
       </div>
     </header>
 
     <main class="container">
       <ul>
-        {% for link in links %}
+        {% for link in dog_links %}
         <li>
           <div class="votes">
             <a href="/vote/{{ link.id }}/upvote" class="up">▲</a>
