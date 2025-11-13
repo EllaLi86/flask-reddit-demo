@@ -91,9 +91,9 @@
         {% for link in links %}
         <li>
           <div class="votes">
-            <button class="up">▲</button>
-            <div class="score" data-score>{{ link.score }}</div>
-            <button class="down">▼</button>
+            <a href="/vote/{{ link.id }}/upvote" class="up">▲</a>
+            <div class="score" data-score="{{ link.score }}">{{ link.score }}</div>
+            <a href="/vote/{{ link.id }}/downvote" class="down">▼</a>
           </div>
           <div class="content">
             <p class="title">
