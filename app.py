@@ -59,3 +59,7 @@ def vote(link_id, action):
             break
 
     return redirect(url_for("homepage"))
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
