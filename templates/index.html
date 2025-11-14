@@ -32,6 +32,11 @@
         margin: 0;
         padding: 12px 0;
       }
+      h2 {
+        font-size: 18px;
+        margin: 30px 0 15px 0;
+        color: #666;
+      }
       ul {
         list-style: none;
         padding: 0;
@@ -76,6 +81,28 @@
       a {
         color: inherit;
       }
+      .hide-btn {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #666;
+        background: none;
+        border: none;
+        padding: 4px 8px;
+        cursor: pointer;
+        text-decoration: underline;
+      }
+      .hide-btn:hover {
+        color: #333;
+        background: rgba(127, 127, 127, 0.1);
+      }
+      .hidden-section {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 2px solid #ddd;
+      }
+      .hidden-posts li {
+        opacity: 0.6;
+      }
     </style>
   </head>
 
@@ -84,16 +111,17 @@
       <div class="container">
         <h1>Flask Reddit — Dogs</h1>
         <nav style="margin-top: 8px;">
-                <a href="{{ url_for('submit') }}" style="background-color: #0079d3; color: white; padding: 6px 12px; text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: 500;">
-                    + Submit New Post
-                </a>
-          </nav>
+          <a href="{{ url_for('submit') }}" style="background-color: #0079d3; color: white; padding: 6px 12px; text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: 500;">
+            + Submit New Post
+          </a>
+        </nav>
       </div>
     </header>
 
     <main class="container">
+      <!-- Main posts (non-hidden) -->
       <ul>
-        {% for link in dog_links %}
+        {% for link in links %}
         <li>
           <div class="votes">
             <a href="/vote/{{ link.id }}/upvote" class="up">▲</a>
@@ -113,10 +141,50 @@
               rel="noopener noreferrer"
               >{{ link.url }}</a
             >
+            <div>
+              <a href="/hide/{{ link.id }}" class="hide-btn">
+                {% if link.hidden %}Unhide{% else %}Hide{% endif %}
+              </a>
+            </div>
           </div>
         </li>
         {% endfor %}
       </ul>
+
+      <!-- Hidden posts section -->
+      {% if hidden_links %}
+      <div class="hidden-section">
+        <h2>Hidden posts</h2>
+        <ul class="hidden-posts">
+          {% for link in hidden_links %}
+          <li>
+            <div class="votes">
+              <a href="/vote/{{ link.id }}/upvote" class="up">▲</a>
+              <div class="score" data-score="{{ link.score }}">{{ link.score }}</div>
+              <a href="/vote/{{ link.id }}/downvote" class="down">▼</a>
+            </div>
+            <div class="content">
+              <p class="title">
+                <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer"
+                  >{{ link.title }}</a
+                >
+              </p>
+              <a
+                class="url"
+                href="{{ link.url }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                >{{ link.url }}</a
+              >
+              <div>
+                <a href="/hide/{{ link.id }}" class="hide-btn">Unhide</a>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
     </main>
   </body>
 </html>
